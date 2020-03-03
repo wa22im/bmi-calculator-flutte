@@ -1,7 +1,9 @@
+import 'package:bmi_calculator/utilitiesclasses/calculator_bmi.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/card_reusable.dart';
 import '../widgets/icon_reusable.dart';
+import 'resulat_page.dart';
 
 
 import'../constants/constants.dart';
@@ -10,15 +12,27 @@ enum Gender{
 male,
 female
 }
+enum WazenVAriation{
+  plus ,
+  moins 
+}
 
 class InputPage extends StatefulWidget {
+
+
   @override
   _InputPageState createState() => _InputPageState();
 }
 
 class _InputPageState extends State<InputPage> {
   double heightpersonne=150.0 ; 
+  int wazen = 50 ; 
+  int age = 16 ; 
 
+  void changeWazen(WazenVAriation w) {
+    w == WazenVAriation.plus ? setState(()=>wazen++) : setState(()=>wazen--);
+
+  }
 
       Color maleSelectedColor =INACTIVECARDCOLOR; 
           
@@ -95,21 +109,46 @@ class _InputPageState extends State<InputPage> {
               child: CardReusable( 
               colour:  ACTIVECARDCOLOR,  
               cardChild:Column(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
               children :<Widget>
             [ 
+              Container(
+                
+                alignment: AlignmentDirectional.center,
+                padding: EdgeInsets.only(
+                  top:10.0,
+                  left: 5.0
+                ),
+              child:
                Text('HEIGHT ',
-              style: DECORATION,),
+              style: DECORATION.copyWith(
+                letterSpacing: 10.0,
+
+              ),
+              ),
+              ),
 
             Row(
+               crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
               children: <Widget>[
+                 Container(
+                
+                alignment: AlignmentDirectional.center,
+                padding: EdgeInsets.only(
+                  top:10.0,
+                  left: 5.0
+                ),
+              child:
                 Text('$heightpersonne',
                 style:kNUMBERTEXTSTYLE,
-                ),
+                )),
                 Text('cm',
                 style: DECORATION,
                 ),
+                
               ],
             ),
              Expanded(
@@ -157,10 +196,103 @@ class _InputPageState extends State<InputPage> {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: <Widget>[
-                  Expanded(child:CardReusable(
+                  Expanded(
+                    child:CardReusable(
+                      cardChild: Column(
+                        children: <Widget>[
+                           Container(
+                
+                alignment: AlignmentDirectional.center,
+                padding: EdgeInsets.only(
+                  top:10.0,
+                  left: 5.0
+                ),
+              child:Text('Weight',
+              style: DECORATION,
+              ),
+             ),
+              Text('$wazen',
+              style:kNUMBERTEXTSTYLE,),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                
+                RoundIconButton(
+                   onpressed: (){
+                    this.setState(()=>wazen++);
+                  },
+                  icon:FontAwesomeIcons.plus
+                ),
+                Container(
+                  margin: EdgeInsets.all(MediaQuery.of(context).size.width*0.01),
+                ),
+                RoundIconButton(
+                  onpressed: (){
+                    this.setState(()=>wazen--);
+                  },
+                  icon: FontAwesomeIcons.minus,
+                ),
+                 Container(
+                  margin: EdgeInsets.only(top:MediaQuery.of(context).size.width*0.1),
+                ),
+
+              ],
+              ),
+                        ],
+                      ),
                     colour: ACTIVECARDCOLOR,),
                   ),
                   Expanded(child: CardReusable(
+                    cardChild: Column(
+                        children: <Widget>[
+                           Container(
+                
+                alignment: AlignmentDirectional.center,
+                padding: EdgeInsets.only(
+                  top:10.0,
+                  left: 5.0
+                ),
+              child:Text('Age',
+              style: DECORATION,
+              ),
+             ),
+              Text('$age',
+              style:kNUMBERTEXTSTYLE,),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                
+                RoundIconButton(
+                   onpressed: (){
+                    this.setState(()=>age++);
+                  },
+                  icon:FontAwesomeIcons.plus
+                ),
+                Container(
+                  margin: EdgeInsets.all(MediaQuery.of(context).size.width*0.01),
+                ),
+                RoundIconButton(
+                  onpressed: (){
+                    this.setState(()=>age--);
+                  },
+                  icon: FontAwesomeIcons.minus,
+                ),
+                 Container(
+                  margin: EdgeInsets.only(top:MediaQuery.of(context).size.width*0.1),
+                ),
+
+              ],
+              ),
+                        ],
+                      ),
+
+
+
+
+
+                    
                     colour: ACTIVECARDCOLOR
                   ),
                   ),
@@ -169,14 +301,37 @@ class _InputPageState extends State<InputPage> {
               
               ),
               
-             
-                Container(
+            
+             GestureDetector(
+               onTap: (){
+
+                 CalculatorBMI bmi = CalculatorBMI(
+                   height: heightpersonne,
+                   weight: wazen.toDouble(),
+                   
+                 );
+                 Navigator.push(context,MaterialPageRoute(builder: (context)=>ResultWidget(
+                   bmiResult: bmi.getBMI(),
+                   interpretation: bmi.getInterpretation(),
+                   resultText: bmi.getResult(),
+                 )));
+               },
+                child:Container(
+                
+                alignment: Alignment.center,
+                child: Text('CALCULATE',
+                style: DECORATION.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.yellow.shade800
+                ),),
               color: Color(0xFFEB1555),
               margin: EdgeInsets.only(
-                top:10.0
+                top:10.0,
+                bottom: 5.0
              ),
              width: double.infinity,
-             height: MediaQuery.of(context).size.height*0.1,
+             height: MediaQuery.of(context).size.height*0.08,
+            ),
             ),
           ],
         ),
@@ -184,9 +339,29 @@ class _InputPageState extends State<InputPage> {
     );
   }
   }
- 
 
-    
+class RoundIconButton extends StatelessWidget {
+  const RoundIconButton({Key key ,this.icon , this.onpressed}) : super(key: key);
+  final IconData icon ; 
+  final Function onpressed  ; 
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      disabledElevation: 10.0,
+      child: Icon(icon,
+      color: Colors.red.shade500,) ,
+      fillColor: Colors.white,
+      constraints: BoxConstraints.tightFor(
+        width:50.0,
+        height: 50.0,
+      ),
+      elevation: 15.0,
+      shape: CircleBorder(),
+      onPressed: onpressed, 
+      
+      );
+  }
+}
 
   
   
