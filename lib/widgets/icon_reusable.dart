@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 
-const double ICON_SIZE = 40.0;
+import'../constants/constants.dart';
 
-const double BOX_SIZED_HEIGHT = 15.0;
 
-const Color COLOR_CARD =   Color(0xFF8D8E98);
-
-const TextStyle DECORATION = TextStyle(
-                            fontSize: 16.0,
-                            fontWeight:FontWeight.bold ,
-                            color: Color(0xFF8D8E98),
-                          );
 
  
 

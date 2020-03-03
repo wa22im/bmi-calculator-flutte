@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
+import'../constants/constants.dart';
 
-const double MARGIN_CARD = 15.0;
-const double RADIUS_CARD = 15.0;
+
 
  class CardReusable extends StatelessWidget {
 
- CardReusable({@required this.colour , this.cardChild } );
+ CardReusable({@required this.colour,this.onPressedfn , this.cardChild } );
     final Color colour  ; 
     final Widget cardChild ;
-  
+    final Function onPressedfn ;
 
   @override
   Widget build(BuildContext context) {
     return 
-       Container(
-         child: cardChild,
-         
+  GestureDetector( 
+                      
+       onTap: onPressedfn,
+      child :  Container(
+      child: cardChild,
                       margin: EdgeInsets.all(MARGIN_CARD),
                       decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(RADIUS_CARD),
                       color : colour,
-                  )
+                  ),
+      ),
                   );
           
   }}
